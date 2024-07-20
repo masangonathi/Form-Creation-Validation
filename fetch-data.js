@@ -8,7 +8,7 @@ async function fetchUserData() {
         
         // Check if the response is OK (status code 200-299)
         if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+            throw new Error('HTTP error! Status: ${response.status}');
         }
         
         // Parse the response as JSON
@@ -17,21 +17,26 @@ async function fetchUserData() {
         // Display user data in the DOM
         dataContainer.innerHTML = ''; // Clear any existing content
 
-        data.forEach(user => {
-            const userList = document.createElement('li');
-            userList.textContent = `${user.name} (${user.email})`;
-            dataContainer.appendChild(userList);
+        const userList = document.createElement('ul');
+
+        users.forEach(user => {
+            const ListItem = document.createElement('li');
+            ListItem.textContent = user.name; 
+            userList.appendChild(ListItem);
         });
+
+        dataContainer.appendChild(userList);
+
     } catch (error) {
         // Handle any errors that occur during the fetch
-        console.error('There has been a problem with your fetch operation:', error);
-        dataContainer.textContent = 'Failed to load user data. Please try again later.';
-        dataContainer.style.color = 'red';
+        
+        dataContainer.innerHTML = '';
+        dataContainer.textContent = 'Failed to load user data.';
     }
 }
 
 // Call the fetchUserData function to execute it
-fetchUserData();
+    document.addEventListener('DOMContentLoaded', fetchUserData);
 
 
 
